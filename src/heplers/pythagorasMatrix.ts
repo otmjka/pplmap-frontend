@@ -68,7 +68,7 @@ type PyhographData = {
 */
 
 // @TODO tests
-export default function getCells(date: string): PyhographData {
+export function getCells(date: string): PyhographData {
   const numberArr: BirthDayNumbers = getNumbersFromDate(date);
   let calculatedNumbers = [];
   // Q7

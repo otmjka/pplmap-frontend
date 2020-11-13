@@ -1,4 +1,4 @@
-import { sum, countBy } from './pythagorasMatrix';
+import { sum, countBy, getCells } from './pythagorasMatrix';
 
 describe('lodash substitute', () => {
   test('[sum] function', () => {
@@ -17,4 +17,24 @@ describe('lodash substitute', () => {
   });
 });
 
-export {};
+describe('pythagorasMatrix', () => {
+  test('getCells', () => {
+    const result = getCells('10.09.1985');
+    expect(result).toEqual({
+      calculatedNumbers: [3, 3, 0, 6, 3, 1, 0, 4],
+      cells: [4, 3, 0, 3, 1, 1, 1, 0, 1, 2],
+      dateNumbers: [1, 0, 0, 9, 1, 9, 8, 5],
+      psyNumber: 3,
+      squareNumbers: {
+        '0': 4,
+        '1': 3,
+        '3': 3,
+        '4': 1,
+        '5': 1,
+        '6': 1,
+        '8': 1,
+        '9': 2,
+      },
+    });
+  });
+});
