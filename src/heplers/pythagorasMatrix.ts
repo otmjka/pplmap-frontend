@@ -1,3 +1,28 @@
+export const numbersReg = /\d/g;
+
+type BirthDayNumbers = Array<number>;
+
+export type CellsNumbers = Array<number>;
+/* 
+  psyNumber
+  1 - young spirit, 2 - shudra, 3 - host, 4 - warrior */
+export type PyhographData = {
+  psyNumber: number;
+
+  cells: CellsNumbers;
+  calculatedNumbers: Array<number>; // ?
+  dateNumbers: Array<number>; // ?
+  squareNumbers: Record<string, number>;
+};
+
+// type ResultCells = {
+//   dateNumbers: numberArr,
+//   calculatedNumbers,
+//   squareNumbers,
+//   cells,
+//   psyNumber,
+// }
+
 export const sum = (items: Array<number>): number => {
   const reducer = (accamulator: number, currentValue: number) =>
     accamulator + currentValue;
@@ -21,32 +46,6 @@ export const countBy = (items: Array<number>): Record<string, number> => {
   return items.reduce<Record<string, number>>(reducer, {});
 };
 
-export const numbersReg = /\d/g;
-
-type BirthDayNumbers = Array<number>;
-
-export type CellsNumbers = Array<number>;
-
-type PyhographData = {
-  psyNumber: number; // 1 - young spirit, 2 - shudra, 3 - host, 4 - warrior
-  /**
-   * amount of digits in cells [0..9]
-   * [0:4, // 3, 0, 3, 1, 1, 1, 0, 1, 2]
-   */
-  cells: CellsNumbers;
-  calculatedNumbers: Array<number>; // ?
-  dateNumbers: Array<number>; // ?
-  squareNumbers: { [key: string]: number }; // ?
-};
-
-// type ResultCells = {
-//   dateNumbers: numberArr,
-//   calculatedNumbers,
-//   squareNumbers,
-//   cells,
-//   psyNumber,
-// }
-
 /*
   Q7 = SUM(A7:K7)
   Q8 = Q7 - S7
@@ -68,6 +67,7 @@ type PyhographData = {
 */
 
 // @TODO tests
+
 export function getCells(date: string): PyhographData {
   const numberArr: BirthDayNumbers = getNumbersFromDate(date);
   let calculatedNumbers = [];

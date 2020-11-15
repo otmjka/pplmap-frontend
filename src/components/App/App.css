@@ -1,0 +1,27 @@
+.itemContainer {
+  position: absolute;
+}
+
+.wideScreenContainer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: chartreuse;
+}
+.personListContainer {
+  display: flex;
+
+  width: 200px;
+  height: 200px;
+  background-color: blueviolet;
+}
+
+.personItem {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  height: 50px;
+  width: 50px;
+  background-color: pink;
+}
