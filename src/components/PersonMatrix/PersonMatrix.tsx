@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import './PersonMatrix.css';
 import { fill, matrix } from './helpers';
 
 import { getCells } from '../../heplers/pythagorasMatrix';
