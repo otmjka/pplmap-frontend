@@ -1,23 +1,10 @@
 import * as React from 'react';
-// import logo from './logo.svg';
-import './App.css';
+
+import { fill, matrix } from './helpers';
 
 import { getCells } from '../../heplers/pythagorasMatrix';
-function fill(ch: number, times: number) {
-  let str = '';
-  for (let i = 0; i < times; i++) {
-    str = `${str}${ch}`;
-  }
-  return str;
-}
 
-const matrix = [
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9],
-];
-
-const PersonMatrix = (props: { birthday: string }) => {
+export const PersonMatrix = (props: { birthday: string }) => {
   const { birthday } = props;
   const cells = getCells(birthday);
   const { squareNumbers } = cells;
@@ -68,15 +55,3 @@ const PersonMatrix = (props: { birthday: string }) => {
     </div>
   );
 };
-const App = () => {
-  return (
-    <div>
-      <div className="wideScreenContainer">
-        <PersonMatrix birthday="10.09.1985" />
-        <PersonMatrix birthday="23.06.1987" />
-      </div>
-    </div>
-  );
-};
-
-export default App;
