@@ -39,7 +39,7 @@ export const countBy = (items: Array<number>): Record<string, number> => {
       return accumulator;
     }
 
-    accumulator[currentValue] = accumulator[currentValue] + 1;
+    accumulator[currentValue] += 1;
     return accumulator;
   };
 
@@ -70,7 +70,7 @@ export const countBy = (items: Array<number>): Record<string, number> => {
 
 export function getCells(date: string): PyhographData {
   const numberArr: BirthDayNumbers = getNumbersFromDate(date);
-  let calculatedNumbers = [];
+  const calculatedNumbers = [];
   // Q7
   const sumBirthDayNumbers = sum(numberArr);
   // S7 = A7 === 0 ? B7 * 2 : A7 * 2
@@ -100,7 +100,7 @@ export function getCells(date: string): PyhographData {
 
   const squareNumbers = countBy(resultTmp);
 
-  let cells = [];
+  const cells = [];
 
   for (let i = 0; i < 10; i++) {
     cells[i] = squareNumbers[i] ? squareNumbers[i] : 0;

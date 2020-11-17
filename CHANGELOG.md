@@ -2,13 +2,15 @@
 
 ## 2020-10-17
 
-1. add material ui
+1. [+] add material ui
 2. add minimal person creation form + button
 3. save to backend
 4. deploy to heroku
    ?5. test person component
    ?6. test from
    ?7. test CRUD for person
+5. [-] [eslint](https://medium.com/@brygrill/create-react-app-with-typescript-eslint-prettier-and-github-actions-f3ce6a571c97)
+   [fix Resolve error: typescript with invalid interface loaded as resolver](https://stackoverflow.com/a/63451047/6028246)
 
 ===
 

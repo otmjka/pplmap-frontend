@@ -1,11 +1,11 @@
 import * as React from 'react';
+
 import Box from '@material-ui/core/Box';
 import { styled } from '@material-ui/core/styles';
-
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 
 import './App.css';
 import { PersonMatrix } from '../PersonMatrix';
@@ -79,9 +79,10 @@ export function SimpleModal() {
           <Box mb={1}>
             <TextField id="name" label="name" variant="outlined" />
           </Box>
-          <Box>
+          <Box mb={1}>
             <TextField id="birthday" label="birthday" variant="outlined" />
           </Box>
+          <Box></Box>
         </Box>
       </form>
     </div>
