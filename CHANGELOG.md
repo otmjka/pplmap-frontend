@@ -6,6 +6,7 @@
 2. try Apollo
 3. react-router
 4. authication
+5. add symantic-release
 
 ## 2020-10-17
 
