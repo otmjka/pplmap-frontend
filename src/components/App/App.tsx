@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 import Box from '@material-ui/core/Box';
+
 import { styled } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import TextField from '@material-ui/core/TextField';
 
 import './App.css';
+import AddPersonForm from '../AddPersonForm';
 import { PersonMatrix } from '../PersonMatrix';
 
 const AddButtonWrapper = styled(Box)({
@@ -72,19 +72,7 @@ export function SimpleModal() {
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      <Typography variant="h5">Add a Person</Typography>
-
-      <form>
-        <Box mt={2}>
-          <Box mb={1}>
-            <TextField id="name" label="name" variant="outlined" />
-          </Box>
-          <Box mb={1}>
-            <TextField id="birthday" label="birthday" variant="outlined" />
-          </Box>
-          <Box></Box>
-        </Box>
-      </form>
+      <AddPersonForm />
     </div>
   );
 
