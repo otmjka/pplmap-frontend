@@ -1,14 +1,14 @@
-import * as React from 'react';
-
+/* eslint-disable */
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Box from '@material-ui/core/Box';
+import { format } from 'date-fns';
 
 import { styled } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
 
 import './App.css';
-import AddPersonForm from '../AddPersonForm';
 import { PersonMatrix } from '../PersonMatrix';
+import SimpleModal from '../SimpleModal';
 
 const AddButtonWrapper = styled(Box)({
   position: 'absolute',
@@ -16,6 +16,41 @@ const AddButtonWrapper = styled(Box)({
 });
 
 const App = () => {
+  interface PersonUIData {
+    birthday: string; // should be date
+    id: string;
+    person_name: string;
+  }
+  const [persons, setPersons] = useState<Array<PersonUIData>>([]);
+  useEffect(() => {
+    (async () => {
+      try {
+        interface PersonData {
+          birthday: string;
+          id: string;
+          person_name: string;
+        }
+        interface PersonsRespons {
+          data: Array<PersonData>;
+        }
+        const response = await axios.get<Array<PersonData>>(
+          'https://agile-earth-99949.herokuapp.com/persons',
+        );
+        console.log(response);
+        const personsWithCorrectDate = response.data.map((rawPerson) => {
+          const birsthdayDate = new Date(rawPerson.birthday);
+
+          return {
+            ...rawPerson,
+            birthday: format(birsthdayDate, 'dd.MM.yyyy'),
+          };
+        });
+        setPersons(personsWithCorrectDate);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
   return (
     <div>
       <AddButtonWrapper>
@@ -23,74 +58,12 @@ const App = () => {
         <SimpleModal />
       </AddButtonWrapper>
       <div className="wideScreenContainer">
-        <PersonMatrix birthday="10.09.1985" />
-        <PersonMatrix birthday="23.06.1987" />
+        {persons.map((person: { birthday: string; id: string }) => (
+          <PersonMatrix key={person.id} birthday={person.birthday} />
+        ))}
       </div>
     </div>
   );
 };
-
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
-function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    position: 'absolute',
-    width: 400,
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-}));
-
-export function SimpleModal() {
-  const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
-  const [modalStyle] = React.useState(getModalStyle);
-  const [open, setOpen] = React.useState(true);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const body = (
-    <div style={modalStyle} className={classes.paper}>
-      <AddPersonForm />
-    </div>
-  );
-
-  return (
-    <div>
-      <button type="button" onClick={handleOpen}>
-        Open Modal
-      </button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        {body}
-      </Modal>
-    </div>
-  );
-}
 
 export default App;

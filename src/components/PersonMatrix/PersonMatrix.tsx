@@ -37,10 +37,12 @@ export const PersonMatrix = (props: { birthday: string }) => {
   };
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div className="itemContainer" onMouseDown={add} onMouseUp={remove}>
       <div className="personListContainer">
         {matrix.map((row, j) => {
           return (
+            // eslint-disable-next-line react/no-array-index-key
             <div key={j}>
               {row.map((key) => {
                 return (

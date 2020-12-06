@@ -1,5 +1,11 @@
 ===
 
+## Now(In progress)
+
+1. [+] get persons from backend
+2. [-] add person
+3. [?] apollo
+
 ## Next
 
 1. Internalization
