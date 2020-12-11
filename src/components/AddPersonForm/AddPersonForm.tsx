@@ -4,7 +4,8 @@ import { Formik } from 'formik';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+
+import H2 from '../H2';
 
 const formValidate = (values: {
   name: string;
@@ -20,7 +21,7 @@ const formValidate = (values: {
 const AddPersonForm = () => {
   return (
     <Box>
-      <Typography variant="h5">Add a Person</Typography>
+      <H2>Add a Person</H2>
       <Formik
         initialValues={{ name: '', birthday: '' }}
         validate={formValidate}
@@ -45,10 +46,15 @@ const AddPersonForm = () => {
             <Box mt={2}>
               <Box mb={1}>
                 <TextField
+                  label="name"
+                  type="name"
+                  variant="outlined"
+                  fullWidth
                   name="name"
+                  helperText={!!errors.name && 'required'}
+                  error={!!errors.name}
                   onChange={handleChange}
                   value={values.name}
-                  variant="outlined"
                 />
               </Box>
               <Box mb={1}>
