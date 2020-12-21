@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import H2 from '../H2';
+import { Person } from '../../types/Person';
 
 const formValidate = (values: {
   name: string;
@@ -17,8 +18,14 @@ const formValidate = (values: {
   }
   return errors;
 };
-
-const AddPersonForm = () => {
+// : {onSubmit: (person: Person) => Promise<void>}
+const AddPersonForm = ({
+  onClose,
+  onSubmit,
+}: {
+  onClose: () => void;
+  onSubmit: (person: Person) => Promise<void>;
+}) => {
   return (
     <Box>
       <H2>Add a Person</H2>
@@ -26,10 +33,8 @@ const AddPersonForm = () => {
         initialValues={{ name: '', birthday: '' }}
         validate={formValidate}
         onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
+          onSubmit(values);
+          setSubmitting(false);
         }}
       >
         {({
@@ -46,11 +51,11 @@ const AddPersonForm = () => {
             <Box mt={2}>
               <Box mb={1}>
                 <TextField
+                  name="name"
                   label="name"
                   type="name"
                   variant="outlined"
                   fullWidth
-                  name="name"
                   helperText={!!errors.name && 'required'}
                   error={!!errors.name}
                   onChange={handleChange}
@@ -60,15 +65,19 @@ const AddPersonForm = () => {
               <Box mb={1}>
                 <TextField
                   name="birthday"
+                  label="birthday"
+                  type="birthday"
+                  placeholder="dd.mm.yyyy 17.05.2010"
+                  variant="outlined"
+                  fullWidth
                   onChange={handleChange}
                   value={values.birthday}
-                  variant="outlined"
                 />
               </Box>
               <Box>
                 <Button
                   onClick={() => {
-                    alert('!');
+                    onClose();
                   }}
                 >
                   Close

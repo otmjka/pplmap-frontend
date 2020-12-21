@@ -1,60 +1,43 @@
 import * as React from 'react';
+import { styled } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 
-import './PersonMatrix.css';
 import { fill, matrix } from './helpers';
 
 import { getCells } from '../../heplers/pythagorasMatrix';
+import NumberBox from './NumberBox';
+
+const MatrixContainer = styled(Box)({
+  display: 'flex',
+  width: 200,
+  height: 200,
+  backgroundColor: 'blueviolet',
+  border: '1px #eee solid',
+});
+
+const RowContainer = styled(Box)({ width: '100%' });
 
 export const PersonMatrix = (props: { birthday: string }) => {
   const { birthday } = props;
   const cells = getCells(birthday);
   const { squareNumbers } = cells;
-  let offsetX: number;
-  let offsetY: number;
-
-  const move = (e: React.MouseEvent<HTMLElement, React.MouseEvent>) => {
-    const el = e.currentTarget as HTMLElement;
-    el.style.left = `${e.pageX - offsetX}px`;
-    el.style.top = `${e.pageY - offsetY}px`;
-    el.style.background = 'red';
-    e.preventDefault();
-  };
-
-  const add = (e: React.MouseEvent) => {
-    const el = e.currentTarget as HTMLElement;
-    offsetX = e.clientX - el.getBoundingClientRect().left;
-    offsetY = e.clientY - el.getBoundingClientRect().top;
-    console.log({ offsetX, offsetY });
-    // @ts-ignore
-    el.addEventListener('mousemove', move);
-    e.preventDefault();
-  };
-
-  const remove = (e: React.MouseEvent) => {
-    // @ts-ignore
-    e.currentTarget.removeEventListener('mousemove', move);
-    e.preventDefault();
-  };
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div className="itemContainer" onMouseDown={add} onMouseUp={remove}>
-      <div className="personListContainer">
-        {matrix.map((row, j) => {
-          return (
-            // eslint-disable-next-line react/no-array-index-key
-            <div key={j}>
-              {row.map((key) => {
-                return (
-                  <div key={key} className="personItem">
-                    {squareNumbers[key] ? fill(key, squareNumbers[key]) : '-'}
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
-    </div>
+    <MatrixContainer>
+      {matrix.map((row, j) => {
+        return (
+          // eslint-disable-next-line react/no-array-index-key
+          <RowContainer key={j}>
+            {row.map((key) => {
+              return (
+                <NumberBox key={key}>
+                  {squareNumbers[key] ? fill(key, squareNumbers[key]) : '-'}
+                </NumberBox>
+              );
+            })}
+          </RowContainer>
+        );
+      })}
+    </MatrixContainer>
   );
 };

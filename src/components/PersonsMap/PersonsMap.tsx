@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { parse } from 'date-fns';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import { styled } from '@material-ui/core/styles';
 
-import { format } from 'date-fns';
-import { PersonMatrix } from '../PersonMatrix';
 import SimpleModal from '../SimpleModal';
+import AddPersonForm from '../AddPersonForm';
+import { Person, PersonUIData } from '../../types/Person';
+import usePersons from './usePersons';
+import MoveContainer from '../MoveContainer';
+import MapPerson from '../MapPerson/MapPerson';
 
 const AddButtonWrapper = styled(Box)({
   position: 'absolute',
@@ -13,50 +17,46 @@ const AddButtonWrapper = styled(Box)({
 });
 
 const PersonsMap = () => {
-  interface PersonUIData {
-    birthday: string; // should be date
-    id: string;
-    person_name: string;
-  }
-  const [persons, setPersons] = useState<Array<PersonUIData>>([]);
-  useEffect(() => {
-    (async () => {
-      try {
-        interface PersonData {
-          birthday: string;
-          id: string;
-          person_name: string;
-        }
-        // interface PersonsRespons {
-        //   data: Array<PersonData>;
-        // }
-        const response = await axios.get<Array<PersonData>>(
-          'https://agile-earth-99949.herokuapp.com/persons',
-        );
-        console.log(response);
-        const personsWithCorrectDate = response.data.map((rawPerson) => {
-          const birsthdayDate = new Date(rawPerson.birthday);
+  const [personsList, addPerson] = usePersons(); // fetch from server
+  type LocState = (Person & { custom: string | Date }) | null;
+  const [formValues, setFormValues] = useState<LocState>(null);
+  const [open, setOpen] = useState(false);
 
-          return {
-            ...rawPerson,
-            birthday: format(birsthdayDate, 'dd.MM.yyyy'),
-          };
-        });
-        setPersons(personsWithCorrectDate);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
+  const handleAddPerson = async (person: Person) => {
+    // eslint-disable-next-line no-console
+    console.log(person);
+    setFormValues({
+      ...person,
+      custom: parse(person.birthday, 'dd.MM.yyyy', new Date()),
+    });
+    await addPerson(person);
+  };
+
   return (
     <div>
       <AddButtonWrapper>
-        {/* <Button variant="contained">Add Person</Button> */}
-        <SimpleModal />
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => setOpen(!open)}
+        >
+          Add a Person
+        </Button>
       </AddButtonWrapper>
+
+      <SimpleModal open={open} setOpen={setOpen}>
+        <AddPersonForm
+          onClose={() => setOpen(false)}
+          onSubmit={handleAddPerson}
+        />
+        {formValues && <div>{JSON.stringify(formValues, null, 2)}</div>}
+      </SimpleModal>
+
       <div className="wideScreenContainer">
-        {persons.map((person: { birthday: string; id: string }) => (
-          <PersonMatrix key={person.id} birthday={person.birthday} />
+        {personsList.map((person: PersonUIData) => (
+          <MoveContainer key={person.id}>
+            <MapPerson person={person} />
+          </MoveContainer>
         ))}
       </div>
     </div>

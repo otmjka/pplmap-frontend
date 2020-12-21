@@ -1,14 +1,17 @@
 ===
 
+0. incorrect birsthay date
+   - from frontend (Synchronize date format between frontend and backend)[https://stackoverflow.com/questions/34501192/synchronize-date-format-between-frontend-and-backend]
+
 ## Now(In progress)
 
+1. [-] Internalization. placeholders in forms
 1. [+] get persons from backend
-2. [-] add person
-3. [?] apollo
+1. [+] add person
+1. [?] apollo
 
 ## Next
 
-1. Internalization
 2. try Apollo
 3. react-router
 4. authication
