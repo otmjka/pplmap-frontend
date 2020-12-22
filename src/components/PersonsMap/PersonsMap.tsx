@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { parse } from 'date-fns';
+import Chip from '@material-ui/core/Chip';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { styled } from '@material-ui/core/styles';
@@ -10,6 +11,7 @@ import { Person, PersonUIData } from '../../types/Person';
 import usePersons from './usePersons';
 import MoveContainer from '../MoveContainer';
 import MapPerson from '../MapPerson/MapPerson';
+import EnvLabel from '../EnvLabel';
 
 const AddButtonWrapper = styled(Box)({
   position: 'absolute',
@@ -43,6 +45,7 @@ const PersonsMap = () => {
           Add a Person
         </Button>
       </AddButtonWrapper>
+      <EnvLabel />
 
       <SimpleModal open={open} setOpen={setOpen}>
         <AddPersonForm

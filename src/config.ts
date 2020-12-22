@@ -1,5 +1,5 @@
 export default {
   api: {
-    baseUrl: 'https://agile-earth-99949.herokuapp.com', // // 'http://localhost:3001',
+    baseUrl: process.env.REACT_APP_API_URL,
   },
 };

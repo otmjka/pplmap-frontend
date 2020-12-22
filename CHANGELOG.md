@@ -35,6 +35,7 @@ BACKLOG:
 [-] [api adresses by environment variables](https://github.com/otmjka/pplmap-frontend/issues/1)
 
 [-] add ssh for github. remove info from README.md
+[-] research: folders structure. describe in issues
 
 [-] incorrect birsthay date
 
