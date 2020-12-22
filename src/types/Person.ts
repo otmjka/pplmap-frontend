@@ -1,4 +1,5 @@
 export interface Person {
+  id: string;
   birthday: string;
   name: string;
 }
@@ -14,3 +15,8 @@ export interface PersonUIData {
   id: string;
   person_name: string;
 }
+
+export type AddPersonFormData = {
+  birthday: string;
+  name: string;
+};

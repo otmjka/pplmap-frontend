@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import H2 from '../H2';
-import { Person } from '../../types/Person';
+import { AddPersonFormData } from '../../types/Person';
 
 const formValidate = (values: {
   name: string;
@@ -18,13 +18,12 @@ const formValidate = (values: {
   }
   return errors;
 };
-// : {onSubmit: (person: Person) => Promise<void>}
 const AddPersonForm = ({
   onClose,
   onSubmit,
 }: {
   onClose: () => void;
-  onSubmit: (person: Person) => Promise<void>;
+  onSubmit: (person: AddPersonFormData) => Promise<void>;
 }) => {
   return (
     <Box>

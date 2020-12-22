@@ -6,9 +6,13 @@ import Typography from '@material-ui/core/Typography';
 import { PersonMatrix } from '../PersonMatrix';
 import { PersonUIData } from '../../types/Person';
 
-const MapPerson = ({ person }: { person: PersonUIData }) => {
+interface MapPersonProps {
+  person: PersonUIData;
+  onPersonSelect: (person: PersonUIData) => void;
+}
+const MapPerson = ({ person, onPersonSelect }: MapPersonProps) => {
   return (
-    <Paper square>
+    <Paper square onClick={() => onPersonSelect(person)}>
       <Box display="flex" p={1}>
         <Box mr={1}>
           <Typography>{person.person_name}</Typography>
