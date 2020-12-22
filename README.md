@@ -6,12 +6,6 @@
 
 ===
 
-git push https://otmjka@github.com/otmjka/pplmap-frontend.git/
-
-## TODO
-
-1. research: folders structure
-
 ## deploy on heroku
 
 ```bash
