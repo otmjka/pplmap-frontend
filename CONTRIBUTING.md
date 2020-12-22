@@ -1,0 +1,5 @@
+- choose issue or create one
+- describe
+- create a new branch
+- do things
+- create pull request

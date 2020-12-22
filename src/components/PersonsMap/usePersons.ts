@@ -40,7 +40,7 @@ const usePersons = (): [
   const addPerson = async (person: Person) => {
     await axios.post(`${config.api.baseUrl}/persons/add`, {
       name: person.name,
-      birthday: new Date(person.birthday),
+      birthday: parse(person.birthday, 'dd.MM.yyyy', new Date()),
     });
   };
   return [persons, addPerson];
