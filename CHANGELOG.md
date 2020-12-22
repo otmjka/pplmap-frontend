@@ -30,35 +30,38 @@
 
 ===
 
-0. incorrect birsthay date
-   - from frontend (Synchronize date format between frontend and backend)[https://stackoverflow.com/questions/34501192/synchronize-date-format-between-frontend-and-backend]
+BACKLOG:
 
-## Now(In progress)
+[-] [api adresses by environment variables](https://github.com/otmjka/pplmap-frontend/issues/1)
 
-1. [-] Internalization. placeholders in forms
-1. [+] get persons from backend
-1. [+] add person
-1. [?] apollo
+[-] add ssh for github. remove info from README.md
 
-## Next
+[-] incorrect birsthay date
+
+[-] from frontend (Synchronize date format between frontend and backend)[https://stackoverflow.com/questions/34501192/synchronize-date-format-between-frontend-and-backend]
+[-] Internalization. placeholders in forms
+[+] get persons from backend
+[+] add person
+[?] apollo
 
 2. try Apollo
 3. react-router
 4. authication
 5. add symantic-release
 
-## 2020-10-17
+## Done:
 
-1. [+] add material ui
-2. add minimal person creation form + button
-3. save to backend
-4. deploy to heroku
-   ?5. test person component
-   ?6. test from
-   ?7. test CRUD for person
-5. [-] [eslint](https://medium.com/@brygrill/create-react-app-with-typescript-eslint-prettier-and-github-actions-f3ce6a571c97)
-   [fix Resolve error: typescript with invalid interface loaded as resolver](https://stackoverflow.com/a/63451047/6028246)
-6. [-] [node_modules/@material-ui/core/styles/index.d.ts' imported multiple times import/no-duplicates]()
+### 2020-10-17
+
+[+] add material ui
+[+] add minimal person creation form + button
+[+] save to backend
+[+] deploy to heroku
+?5. test person component
+?6. test from
+?7. test CRUD for person
+[+] [eslint](https://medium.com/@brygrill/create-react-app-with-typescript-eslint-prettier-and-github-actions-f3ce6a571c97)
+[fix Resolve error: typescript with invalid interface loaded as resolver](https://stackoverflow.com/a/63451047/6028246) 6. [-] [node_modules/@material-ui/core/styles/index.d.ts' imported multiple times import/no-duplicates]()
 
 ===
 
