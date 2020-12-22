@@ -1,6 +1,18 @@
-0.1.2
+0.1.4 First release
+
+- [-] signup
+- [-] login
+- [-] logout
+
+  0.1.3
+
+- [-] add groups/badges
+- [-] filter by badge
+
+  0.1.2
 
 - [-] fix: correct birthday data when add person
+- [-] select person-item
 - [-] feat: remove person
 - [-] feat: change
 
