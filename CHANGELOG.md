@@ -1,3 +1,21 @@
+0.1.2
+
+- [-] fix: correct birthday data when add person
+- [-] feat: remove person
+- [-] feat: change
+
+  0.1.1
+
+- feat: config
+- improove appearance
+- feat: name, birthday data by person
+
+  0.1.0
+
+- use heroku backend
+- show persons
+- add person
+
 ===
 
 0. incorrect birsthay date

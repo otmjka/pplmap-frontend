@@ -1,5 +1,5 @@
 export default {
   api: {
-    baseUrl: 'http://localhost:3001', // // 'https://agile-earth-99949.herokuapp.com/persons',
+    baseUrl: 'https://agile-earth-99949.herokuapp.com', // // 'http://localhost:3001',
   },
 };

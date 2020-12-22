@@ -24,4 +24,4 @@ export const Primary = Template.bind({});
 //   label: 'Button',
 // };
 
-https://spin.atomicobject.com/2015/07/14/css-responsive-square/
+// https://spin.atomicobject.com/2015/07/14/css-responsive-square/
