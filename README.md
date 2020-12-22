@@ -2,7 +2,7 @@
 
 ===
 
-(Site)[https://tranquil-garden-69631.herokuapp.com]
+[web site](https://tranquil-garden-69631.herokuapp.com)
 
 ===
 
@@ -30,4 +30,4 @@ nginx.conf
 
 ## material-ui
 
-(create-react-app-with-typescript)[https://github.com/mui-org/material-ui/blob/master/examples/create-react-app-with-typescript/src/index.tsx]
+[create-react-app-with-typescript](https://github.com/mui-org/material-ui/blob/master/examples/create-react-app-with-typescript/src/index.tsx)
