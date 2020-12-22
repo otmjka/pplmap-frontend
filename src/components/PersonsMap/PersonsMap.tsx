@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { parse } from 'date-fns';
-import Chip from '@material-ui/core/Chip';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { styled } from '@material-ui/core/styles';
 
 import SimpleModal from '../SimpleModal';
 import AddPersonForm from '../AddPersonForm';
-import { Person, PersonUIData } from '../../types/Person';
+import { AddPersonFormData, Person, PersonUIData } from '../../types/Person';
 import usePersons from './usePersons';
 import MoveContainer from '../MoveContainer';
 import MapPerson from '../MapPerson/MapPerson';
@@ -19,19 +18,28 @@ const AddButtonWrapper = styled(Box)({
 });
 
 const PersonsMap = () => {
-  const [personsList, addPerson] = usePersons(); // fetch from server
-  type LocState = (Person & { custom: string | Date }) | null;
+  const [selectedPerson, selectPerson] = useState<PersonUIData>();
+  const [personsList, addPerson, removePerson] = usePersons(); // fetch from server
+  type LocState = (AddPersonFormData & { custom: string | Date }) | null;
   const [formValues, setFormValues] = useState<LocState>(null);
   const [open, setOpen] = useState(false);
 
-  const handleAddPerson = async (person: Person) => {
-    // eslint-disable-next-line no-console
-    console.log(person);
+  const handleAddPerson = async (personFormData: AddPersonFormData) => {
     setFormValues({
-      ...person,
-      custom: parse(person.birthday, 'dd.MM.yyyy', new Date()),
+      ...personFormData,
+      custom: parse(personFormData.birthday, 'dd.MM.yyyy', new Date()),
     });
-    await addPerson(person);
+    await addPerson(personFormData);
+  };
+
+  const handleRemovePerson = async () => {
+    console.log('start', selectedPerson);
+    if (!selectedPerson) {
+      console.log('no selected person');
+      return;
+    }
+    await removePerson(selectedPerson);
+    console.log(selectedPerson);
   };
 
   return (
@@ -39,11 +47,20 @@ const PersonsMap = () => {
       <AddButtonWrapper>
         <Button
           variant="contained"
-          color="secondary"
+          color="primary"
           onClick={() => setOpen(!open)}
         >
           Add a Person
         </Button>
+        {selectedPerson && (
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleRemovePerson}
+          >
+            {`Delete [${selectedPerson.person_name}]`}
+          </Button>
+        )}
       </AddButtonWrapper>
       <EnvLabel />
 
@@ -58,7 +75,7 @@ const PersonsMap = () => {
       <div className="wideScreenContainer">
         {personsList.map((person: PersonUIData) => (
           <MoveContainer key={person.id}>
-            <MapPerson person={person} />
+            <MapPerson person={person} onPersonSelect={selectPerson} />
           </MoveContainer>
         ))}
       </div>
