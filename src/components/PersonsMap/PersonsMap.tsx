@@ -20,16 +20,12 @@ const AddButtonWrapper = styled(Box)({
 const PersonsMap = () => {
   const [selectedPerson, selectPerson] = useState<PersonUIData>();
   const [personsList, addPerson, removePerson] = usePersons(); // fetch from server
-  type LocState = (AddPersonFormData & { custom: string | Date }) | null;
-  const [formValues, setFormValues] = useState<LocState>(null);
   const [open, setOpen] = useState(false);
 
   const handleAddPerson = async (personFormData: AddPersonFormData) => {
-    setFormValues({
-      ...personFormData,
-      custom: parse(personFormData.birthday, 'dd.MM.yyyy', new Date()),
-    });
-    await addPerson(personFormData);
+    const response = await addPerson(personFormData);
+    console.log(response);
+    setOpen(false);
   };
 
   const handleRemovePerson = async () => {
@@ -69,7 +65,6 @@ const PersonsMap = () => {
           onClose={() => setOpen(false)}
           onSubmit={handleAddPerson}
         />
-        {formValues && <div>{JSON.stringify(formValues, null, 2)}</div>}
       </SimpleModal>
 
       <div className="wideScreenContainer">
