@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { format, parse } from 'date-fns';
 
 import {
   AddPersonFormData,
-  Person,
   PersonData,
   PersonUIData,
 } from '../../types/Person';
@@ -12,7 +11,7 @@ import config from '../../config';
 
 const usePersons = (): [
   Array<PersonUIData>,
-  (person: AddPersonFormData) => Promise<void>,
+  (person: AddPersonFormData) => Promise<AxiosResponse<Record<string, string>>>,
   (person: PersonUIData) => Promise<void>,
 ] => {
   const [persons, setPersons] = useState<Array<PersonUIData>>([]);
@@ -44,10 +43,11 @@ const usePersons = (): [
   }, []);
 
   const addPerson = async (person: AddPersonFormData) => {
-    await axios.post(`${config.api.baseUrl}/persons/add`, {
+    const response = await axios.post(`${config.api.baseUrl}/persons/add`, {
       name: person.name,
       birthday: parse(person.birthday, 'dd.MM.yyyy', new Date()),
     });
+    return response;
   };
 
   const removePerson = async ({ id }: PersonUIData) => {
