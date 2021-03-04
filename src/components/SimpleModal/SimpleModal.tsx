@@ -14,18 +14,10 @@ const SimpleModal = ({
   children: React.ReactNode;
 }) => {
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
-  // const [modalStyle] = useState();
-  // style={modalStyle}
-  const handleOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);
   };
-
-  // const body = <div className={classes.paper}></div>;
 
   return (
     <Dialog

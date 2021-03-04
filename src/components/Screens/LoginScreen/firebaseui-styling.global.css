@@ -1,0 +1,13 @@
+.firebaseui-idp-button.firebaseui-id-idp-button {
+  max-width: none;
+}
+
+.firebaseui-container .firebaseui-card-content {
+  padding-left: 0;
+  padding-right: 0;
+}
+.firebaseui-container.firebaseui-page-provider-sign-in {
+  margin-left: 0;
+  margin-right: 0;
+  max-width: none;
+}

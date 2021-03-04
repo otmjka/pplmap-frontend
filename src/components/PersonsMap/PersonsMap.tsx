@@ -1,80 +1,49 @@
 import React, { useState } from 'react';
-import { parse } from 'date-fns';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import { styled } from '@material-ui/core/styles';
 
-import SimpleModal from '../SimpleModal';
-import AddPersonForm from '../AddPersonForm';
-import { AddPersonFormData, Person, PersonUIData } from '../../types/Person';
-import usePersons from './usePersons';
+import Box from '@material-ui/core/Box';
+
+import useStyles from './useStyles';
 import MoveContainer from '../MoveContainer';
 import MapPerson from '../MapPerson/MapPerson';
-import EnvLabel from '../EnvLabel';
+import { PersonUIData } from '../../types/Person';
 
-const AddButtonWrapper = styled(Box)({
-  position: 'absolute',
-  zIndex: 100,
-});
+interface PersonsMapProps {
+  selectedPerson: PersonUIData | undefined;
+  personsList: Array<PersonUIData>;
 
-const PersonsMap = () => {
-  const [selectedPerson, selectPerson] = useState<PersonUIData>();
-  const [personsList, addPerson, removePerson] = usePersons(); // fetch from server
-  const [open, setOpen] = useState(false);
+  onSelectPerson: (value: PersonUIData) => void;
+}
 
-  const handleAddPerson = async (personFormData: AddPersonFormData) => {
-    const response = await addPerson(personFormData);
-    console.log(response);
-    setOpen(false);
-  };
+const PersonsMap = ({
+  selectedPerson,
+  personsList,
+  onSelectPerson,
+}: PersonsMapProps) => {
+  const styles = useStyles();
 
-  const handleRemovePerson = async () => {
-    console.log('start', selectedPerson);
-    if (!selectedPerson) {
-      console.log('no selected person');
-      return;
-    }
-    await removePerson(selectedPerson);
-    console.log(selectedPerson);
-  };
-
+  const [debugInfo, setDebugInfo] = useState({
+    x: 0,
+    y: 0,
+    mouseX: 0,
+    mouseY: 0,
+  });
   return (
-    <div>
-      <AddButtonWrapper>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setOpen(!open)}
-        >
-          Add a Person
-        </Button>
-        {selectedPerson && (
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleRemovePerson}
-          >
-            {`Delete [${selectedPerson.person_name}]`}
-          </Button>
-        )}
-      </AddButtonWrapper>
-      <EnvLabel />
-
-      <SimpleModal open={open} setOpen={setOpen}>
-        <AddPersonForm
-          onClose={() => setOpen(false)}
-          onSubmit={handleAddPerson}
-        />
-      </SimpleModal>
-
-      <div className="wideScreenContainer">
+    <Box className={styles.root}>
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+      <div
+        onMouseDown={() => {
+          // eslint-disable-next-line
+          console.log('onMOuseDown');
+        }}
+        className="wideScreenContainer"
+      >
         {personsList.map((person: PersonUIData) => (
-          <MoveContainer key={person.id}>
-            <MapPerson person={person} onPersonSelect={selectPerson} />
+          <MoveContainer key={person.id} onChange={setDebugInfo}>
+            <MapPerson person={person} onPersonSelect={onSelectPerson} />
           </MoveContainer>
         ))}
       </div>
-    </div>
+    </Box>
   );
 };
 

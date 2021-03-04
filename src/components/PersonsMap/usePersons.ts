@@ -2,59 +2,49 @@ import { useEffect, useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
 import { format, parse } from 'date-fns';
 
+import firebaseService from '../../services/FirebaseService';
+
 import {
   AddPersonFormData,
   PersonData,
   PersonUIData,
 } from '../../types/Person';
 import config from '../../config';
+import { useAuth } from '../../Auth/useAuth';
+import addPerson from '../../Persons/addPerson';
 
-const usePersons = (): [
-  Array<PersonUIData>,
-  (person: AddPersonFormData) => Promise<AxiosResponse<Record<string, string>>>,
-  (person: PersonUIData) => Promise<void>,
-] => {
+const PERSONS_COLLECTION = 'persons';
+
+const usePersons = (): [Array<PersonUIData>] => {
   const [persons, setPersons] = useState<Array<PersonUIData>>([]);
+  const auth = useAuth();
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await axios.get<Array<PersonData>>(
-          `${config.api.baseUrl}/persons`,
-        );
+    if (!auth.user) return undefined;
+    const db = firebaseService.firebaseApp.firestore();
+    const personsRef = db
+      .collection('userProfiles')
+      .doc(auth.user.uid)
+      .collection(PERSONS_COLLECTION);
 
-        // eslint-disable-next-line no-console
-        console.log(response);
+    const personsObserver = personsRef.onSnapshot((personsSnapshot) => {
+      const personsData = personsSnapshot.docs.map((p) => {
+        const personData = p.data();
 
-        const personsWithCorrectDate = response.data.map((rawPerson) => {
-          const birsthdayDate = new Date(rawPerson.birthday);
-
-          return {
-            ...rawPerson,
-            birthday: format(birsthdayDate, 'dd.MM.yyyy'),
-          };
-        });
-        setPersons(personsWithCorrectDate);
-      } catch (error) {
-        // eslint-disable-next-line
-        console.log(error);
-      }
-    })();
-  }, []);
-
-  const addPerson = async (person: AddPersonFormData) => {
-    const response = await axios.post(`${config.api.baseUrl}/persons/add`, {
-      name: person.name,
-      birthday: parse(person.birthday, 'dd.MM.yyyy', new Date()),
+        return {
+          person_name: personData.name,
+          birthday: format(personData.birthday.toDate(), 'dd.MM.yyyy'),
+          id: p.ref.id,
+        };
+      });
+      setPersons(personsData as Array<PersonUIData>);
     });
-    return response;
-  };
+    return () => {
+      personsObserver();
+    };
+  }, [auth.user]);
 
-  const removePerson = async ({ id }: PersonUIData) => {
-    await axios.post(`${config.api.baseUrl}/persons/delete/${id}`);
-  };
-
-  return [persons, addPerson, removePerson];
+  return [persons];
 };
 
 export default usePersons;

@@ -3,6 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+import firebaseService from './services/FirebaseService';
+
+firebaseService.setListener('onMessage', (event) => {
+  console.log('firebaseService receive message: ', event);
+});
 
 ReactDOM.render(
   <React.StrictMode>

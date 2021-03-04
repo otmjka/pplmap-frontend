@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       textTransform: 'uppercase',
       fontWeight: 'bold',
-      marginTop: theme.spacing(5),
+      marginTop: theme.spacing(2),
       marginBottom: theme.spacing(2),
     },
     menuButton: {
