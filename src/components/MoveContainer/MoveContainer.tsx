@@ -3,13 +3,11 @@ import { styled } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 
 interface MoveContainerProps {
+  name: string;
   children: React.ReactNode;
-  onChange: (debugInfo: {
-    x: number;
-    y: number;
-    mouseX: number;
-    mouseY: number;
-  }) => void;
+  offsetX: number;
+  offsetY: number;
+  onChange: (value: { offset: { x: number; y: number } }) => void;
 }
 
 const DebugBlock = styled(Box)({
@@ -21,69 +19,124 @@ const DebugBlock = styled(Box)({
   fontSize: '8px',
 });
 
-const MoveContainer = ({ children, onChange }: MoveContainerProps) => {
+const crossColor = 'purple';
+
+const AxisX = styled(({ top, ...other }) => <Box {...other} />)({
+  position: 'absolute',
+  zIndex: 102,
+  top: (props: { top: string }) => props.top,
+  left: 0,
+  width: '150px',
+  height: '1px',
+  background: crossColor,
+});
+
+const AxisY = styled(({ top, ...other }) => <Box {...other} />)({
+  position: 'absolute',
+  zIndex: 102,
+  top: 0,
+  left: (props: { left: string }) => props.left,
+  width: '1px',
+  height: '150px',
+  background: crossColor,
+});
+
+const Inner = styled(({ isMoving, ...other }) => <Box {...other} />)({
+  position: 'relative',
+  pointerEvents: (props: { isMoving: boolean }) =>
+    props.isMoving ? 'none' : 'auto',
+});
+
+const MoveContainer = ({
+  name,
+  offsetX,
+  offsetY,
+  children,
+  onChange,
+}: MoveContainerProps) => {
   const refContainer = useRef<HTMLDivElement>(null);
-  const [offset, setOffset] = useState({ x: -1, y: -1 });
-  const [mousePosition, setMousePosition] = useState({ mouseX: 0, mouseY: 0 });
+  const [containerPosition, setContainerPostion] = useState({ x: NaN, y: NaN });
+  const [offset, setOffset] = useState({ x: offsetX, y: offsetY });
+  const [delta, setDelta] = useState({ x: 0, y: 0 });
   const [isStartMoving, setIsStartMoving] = useState(false);
-  const [startPosition, setStartPosition] = useState({ x: -1, y: -1 });
-  const left = mousePosition.mouseX - offset.x;
-  const top = mousePosition.mouseY - offset.y;
-  const divStyles = { left: `${left}px`, top: `${top}px` };
+  const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
+
+  const divStyles = {
+    left: `${offset.x + delta.x}px`,
+    top: `${offset.y + delta.y}px`,
+  };
   const debugInfo = {
     on: isStartMoving,
     ...divStyles,
     ...offset,
-    ...mousePosition,
   };
 
   useEffect(() => {
-    // eslint-disable-next-line
-    // debugger;
-    setOffset({
-      x: refContainer?.current?.getBoundingClientRect().left || -1,
-      y: refContainer?.current?.getBoundingClientRect().top || -1,
-    });
-  }, []);
+    // eslint-disable-next-line no-console
+    console.log({ message: 'first useEffect' });
+    if (refContainer == null || refContainer.current == null) {
+      // eslint-disable-next-line no-console
+      console.log({ message: 'refContainer is not defined' });
+      return;
+    }
+    const { left: x, top: y } = refContainer.current.getBoundingClientRect();
+    setContainerPostion({ x, y });
+    // eslint-disable-next-line no-console
+    console.log({ name, x, y });
+  }, [refContainer]);
+
+  useEffect(() => {
+    if (offset.x === offsetX && offset.y === offsetY) {
+      return;
+    }
+    setOffset({ x: offsetX, y: offsetY });
+  }, [offsetX, offsetY]);
 
   const move = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (!isStartMoving) return;
-    console.log(e.pageX - startPosition.x, e.pageY - startPosition.y);
-    // if (!isStartMoving) return;
-    // const mousePos = { mouseX: e.pageX, mouseY: e.pageY };
-    // setMousePosition(mousePos);
-    // onChange({ ...offset, ...mousePos });
-    // e.preventDefault();
+    const x = e.pageX;
+    const y = e.pageY;
+
+    const deltaX = x - startPosition.x;
+    const deltaY = y - startPosition.y;
+    const newValue = {
+      x: deltaX,
+      y: deltaY,
+    };
+    setDelta(newValue);
   };
 
   const add = (e: React.MouseEvent) => {
-    console.log(`
-      ${'add'}
-      ${e.clientX}
-      ${e.clientY}
-      ${refContainer?.current?.getBoundingClientRect().left}
-      ${refContainer?.current?.getBoundingClientRect().top}
-      ${divStyles.left}
-      ${divStyles.top}`);
-    // eslint-disable-next-line
-    // debugger;
-    // if (!refContainer) return;
-    // if (!refContainer.current) return;
-
-    // const offsetX =
-    //   e.clientX - refContainer.current.getBoundingClientRect().left;
-    // const offsetY =
-    //   e.clientY - refContainer.current.getBoundingClientRect().top;
+    if (refContainer == null || refContainer.current == null) {
+      // eslint-disable-next-line no-console
+      console.log({ message: 'refContainer is not defined' });
+      return;
+    }
     setIsStartMoving(true);
-    setStartPosition({ x: e.clientX, y: e.clientY });
-    // setOffset({ x: offsetX, y: offsetY });
-    // e.preventDefault();
+    setContainerPostion({
+      x: refContainer.current.getBoundingClientRect().left,
+      y: refContainer.current.getBoundingClientRect().top,
+    });
+    setStartPosition({
+      x: e.pageX,
+      y: e.pageY,
+    });
   };
 
   const remove = (e: React.MouseEvent) => {
-    console.log('remove');
+    if (!isStartMoving) {
+      return;
+    }
+    if (refContainer == null || refContainer.current == null) {
+      // eslint-disable-next-line no-console
+      console.log({ message: 'refContainer is not defined' });
+      return;
+    }
     setIsStartMoving(false);
-    // e.preventDefault();
+    const newOffset = { x: offset.x + delta.x, y: offset.y + delta.y };
+    setOffset(newOffset);
+    setDelta({ x: 0, y: 0 });
+    onChange({ offset: newOffset });
   };
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
@@ -96,10 +149,14 @@ const MoveContainer = ({ children, onChange }: MoveContainerProps) => {
       onMouseUp={remove}
       onMouseLeave={remove}
     >
-      {children}
-      <DebugBlock>
-        <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
-      </DebugBlock>
+      <Inner isMoving={isStartMoving}>
+        {children}
+        <DebugBlock>
+          <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
+        </DebugBlock>
+        <AxisX top={`${startPosition.y - containerPosition.y}px`} />
+        <AxisY left={`${startPosition.x - containerPosition.x}px`} />
+      </Inner>
     </div>
   );
 };

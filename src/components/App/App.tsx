@@ -20,6 +20,8 @@ import LoginScreen from '../Screens/LoginScreen/LoginScreen';
 import { User } from '../../services/FirebaseService';
 import { useAuth, authContext } from '../../Auth/useAuth';
 import HomeScreen from '../Screens/HomeScreen';
+import { PersonService } from '../../Persons';
+import changePersonPosition from '../../Persons/changePersonPosition';
 
 function PrivateRoute({
   children,
@@ -60,37 +62,45 @@ const App = () => {
 
   return (
     <authContext.Provider value={auth}>
-      <Router>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
+      <PersonService.Provider
+        value={{
+          changePersonPosition: async (personId, value) => {
+            await changePersonPosition({ personId, offset: value });
+          },
+        }}
+      >
+        <Router>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
 
-          {auth.loading && <AppLoader />}
-          {!auth.loading && (
-            <Switch>
-              <Route path="/about">About</Route>
-              <Route path="/users">Users</Route>
-              <Route path="/login">
-                <LoginScreen />
-              </Route>
-              <Route
-                path="/"
-                render={({ location }) => {
-                  return auth.isUserAuthicated ? (
-                    <HomeScreen />
-                  ) : (
-                    <Redirect
-                      to={{
-                        pathname: '/login',
-                        state: { from: location },
-                      }}
-                    />
-                  );
-                }}
-              />
-            </Switch>
-          )}
-        </ThemeProvider>
-      </Router>
+            {auth.loading && <AppLoader />}
+            {!auth.loading && (
+              <Switch>
+                <Route path="/about">About</Route>
+                <Route path="/users">Users</Route>
+                <Route path="/login">
+                  <LoginScreen />
+                </Route>
+                <Route
+                  path="/"
+                  render={({ location }) => {
+                    return auth.isUserAuthicated ? (
+                      <HomeScreen />
+                    ) : (
+                      <Redirect
+                        to={{
+                          pathname: '/login',
+                          state: { from: location },
+                        }}
+                      />
+                    );
+                  }}
+                />
+              </Switch>
+            )}
+          </ThemeProvider>
+        </Router>
+      </PersonService.Provider>
     </authContext.Provider>
   );
 };

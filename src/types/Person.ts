@@ -14,6 +14,8 @@ export interface PersonUIData {
   birthday: string; // should be date
   id: string;
   person_name: string;
+  offsetX?: number;
+  offsetY?: number;
 }
 
 export type AddPersonFormData = {

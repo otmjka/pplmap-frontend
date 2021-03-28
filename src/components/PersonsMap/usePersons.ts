@@ -35,6 +35,8 @@ const usePersons = (): [Array<PersonUIData>] => {
           person_name: personData.name,
           birthday: format(personData.birthday.toDate(), 'dd.MM.yyyy'),
           id: p.ref.id,
+          offsetX: personData.offsetX,
+          offsetY: personData.offsetY,
         };
       });
       setPersons(personsData as Array<PersonUIData>);

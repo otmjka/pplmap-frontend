@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import Box from '@material-ui/core/Box';
 
@@ -6,6 +6,8 @@ import useStyles from './useStyles';
 import MoveContainer from '../MoveContainer';
 import MapPerson from '../MapPerson/MapPerson';
 import { PersonUIData } from '../../types/Person';
+import { PersonService } from '../../Persons';
+import changePersonPosition from '../../Persons/changePersonPosition';
 
 interface PersonsMapProps {
   selectedPerson: PersonUIData | undefined;
@@ -21,12 +23,7 @@ const PersonsMap = ({
 }: PersonsMapProps) => {
   const styles = useStyles();
 
-  const [debugInfo, setDebugInfo] = useState({
-    x: 0,
-    y: 0,
-    mouseX: 0,
-    mouseY: 0,
-  });
+  const personService = useContext(PersonService);
   return (
     <Box className={styles.root}>
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
@@ -38,7 +35,20 @@ const PersonsMap = ({
         className="wideScreenContainer"
       >
         {personsList.map((person: PersonUIData) => (
-          <MoveContainer key={person.id} onChange={setDebugInfo}>
+          <MoveContainer
+            name={person.person_name}
+            key={person.id}
+            offsetX={person.offsetX || 0}
+            offsetY={person.offsetY || 0}
+            onChange={async ({
+              offset,
+            }: {
+              offset: { x: number; y: number };
+            }) => {
+              await personService.changePersonPosition(person.id, offset);
+              console.log({ offset, person });
+            }}
+          >
             <MapPerson person={person} onPersonSelect={onSelectPerson} />
           </MoveContainer>
         ))}
