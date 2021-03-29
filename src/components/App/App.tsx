@@ -17,7 +17,7 @@ import theme from '../Theme';
 import './App.css';
 import useAppLoading from './useAppLoading';
 import LoginScreen from '../Screens/LoginScreen/LoginScreen';
-import { User } from '../../services/FirebaseService';
+import firebaseService, { User } from '../../services/FirebaseService';
 import { useAuth, authContext } from '../../Auth/useAuth';
 import HomeScreen from '../Screens/HomeScreen';
 import { PersonService } from '../../Persons';
@@ -58,8 +58,25 @@ type AuthState = {
 };
 
 const App = () => {
-  const auth = useAppLoading();
+  // const auth = useAppLoading();
+  // console.log({ 'auth.loading': auth.loading });
+  const [authState, setAuthState] = useState({
+    isUserAuthicated: false,
+    user: null,
+    loading: false,
+  });
+  const auth = {
+    ...authState,
+    logout: () => {
+      console.log({ message: 'logout' });
+    },
+  };
 
+  useEffect(() => {
+    firebaseService.setListener('onMessage', (event) => {
+      console.log('[fect] firebaseService receive message: ', event);
+    });
+  }, []);
   return (
     <authContext.Provider value={auth}>
       <PersonService.Provider
@@ -84,6 +101,7 @@ const App = () => {
                 <Route
                   path="/"
                   render={({ location }) => {
+                    console.log({ message: 'a-la private route', auth });
                     return auth.isUserAuthicated ? (
                       <HomeScreen />
                     ) : (

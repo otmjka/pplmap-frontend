@@ -5,6 +5,7 @@ import 'firebase/firestore';
 import 'firebase/storage';
 
 import config from '../config';
+import AuthEvent from './AuthEvent';
 
 /* eslint-disable @typescript-eslint/indent */
 type FirebaseServiceInitType = {};
@@ -62,6 +63,7 @@ class FirebaseService {
 
   init() {
     firebase.auth().onAuthStateChanged(async (userData) => {
+      console.log({ userData });
       this.isAppLoading = false;
       this.currentUser = userData;
       if (!userData) {
@@ -70,7 +72,9 @@ class FirebaseService {
       }
       this.userProfile = await this.getUserProfile(userData.uid);
 
-      this.onMessageTarget.dispatchEvent(new Event(CHANNEL_NAME_ONMESSAGE));
+      this.onMessageTarget.dispatchEvent(
+        new AuthEvent({ type: CHANNEL_NAME_ONMESSAGE, userData }),
+      );
       return undefined;
     });
   }
@@ -95,6 +99,8 @@ class FirebaseService {
       if (!this.channelNames[channelName])
         throw new Error(`no channel: ${channelName}`);
       const localCallBack = (event: Event) => {
+        // eslint-disable-next-line
+        debugger;
         callback({
           type: 'log',
           message: 'to_do',
