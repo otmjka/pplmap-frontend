@@ -1,19 +1,19 @@
 import firebase from 'firebase/app';
 
 class AuthEvent extends Event {
-  userData: firebase.User | undefined;
+  payload: firebase.User | undefined;
 
   constructor({
     type,
     eventInitDict,
-    userData,
+    payload,
   }: {
     type: string;
     eventInitDict?: EventInit | undefined;
-    userData?: firebase.User | undefined;
+    payload?: firebase.User | undefined;
   }) {
     super(type, eventInitDict);
-    this.userData = userData;
+    this.payload = payload;
   }
 }
 

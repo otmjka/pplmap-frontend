@@ -17,12 +17,13 @@ export const CHANNEL_NAME_ONMESSAGE = 'onMessage';
 type ChannelNameOnMessage = typeof CHANNEL_NAME_ONMESSAGE;
 
 type FirebaseChannels = ChannelNameOnMessage;
-type ListenerCallback = (event: FirebaseServiceEvent) => void;
+type ListenerCallback = <Payload>(event: FirebaseServiceEvent<Payload>) => void;
 
-interface FirebaseServiceEvent {
+interface FirebaseServiceEvent<Payload> {
   type: FirebaseServiceEventType;
   message?: string;
-  event: Record<string, Object | null>;
+  channelName: string;
+  payload?: Payload;
 }
 
 type UserProfile = {
@@ -49,7 +50,7 @@ class FirebaseService {
 
   currentUser: User = null;
 
-  userProfile: UserProfile = null;
+  userProfile: UserProfile | null = null;
 
   constructor({}: FirebaseServiceInitType) {
     console.log('init Firebase Service', config.firebase);
@@ -67,13 +68,22 @@ class FirebaseService {
       this.isAppLoading = false;
       this.currentUser = userData;
       if (!userData) {
+        this.onMessageTarget.dispatchEvent(
+          new AuthEvent({
+            type: CHANNEL_NAME_ONMESSAGE,
+          }),
+        );
         // eslint-disable-next-line no-console
-        return console.error('no user data');
+        console.error('no user data');
+        return undefined;
       }
       this.userProfile = await this.getUserProfile(userData.uid);
 
       this.onMessageTarget.dispatchEvent(
-        new AuthEvent({ type: CHANNEL_NAME_ONMESSAGE, userData }),
+        new AuthEvent({
+          type: CHANNEL_NAME_ONMESSAGE,
+          payload: userData,
+        }),
       );
       return undefined;
     });
@@ -93,7 +103,7 @@ class FirebaseService {
 
   setListener(
     channelName: FirebaseChannels,
-    callback: (event: FirebaseServiceEvent) => void,
+    callback: (event: FirebaseServiceEvent<firebase.User>) => void,
   ): () => void {
     try {
       if (!this.channelNames[channelName])
@@ -104,7 +114,8 @@ class FirebaseService {
         callback({
           type: 'log',
           message: 'to_do',
-          event: { user: this.currentUser },
+          channelName,
+          payload: (event as AuthEvent).payload,
         });
       };
 

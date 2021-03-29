@@ -1,9 +1,15 @@
 import { createContext, useContext } from 'react';
 import { UseAppLoadingState } from '../components/App/useAppLoading';
 
-export const authContext = createContext<UseAppLoadingState>({
+type FullState = {
+  isUserAuthicated: boolean;
+  user?: { uid: string; displayName: string | null };
+  loading: boolean;
+} & { logout: () => void };
+
+export const authContext = createContext<FullState>({
   isUserAuthicated: false,
-  user: null,
+  user: undefined,
   loading: true,
   logout: () => {},
 });

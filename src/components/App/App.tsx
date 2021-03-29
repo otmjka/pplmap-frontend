@@ -60,10 +60,14 @@ type AuthState = {
 const App = () => {
   // const auth = useAppLoading();
   // console.log({ 'auth.loading': auth.loading });
-  const [authState, setAuthState] = useState({
+  const [authState, setAuthState] = useState<{
+    isUserAuthicated: boolean;
+    user?: { uid: string; displayName: string | null };
+    loading: boolean;
+  }>({
     isUserAuthicated: false,
-    user: null,
-    loading: false,
+    user: undefined,
+    loading: true,
   });
   const auth = {
     ...authState,
@@ -74,7 +78,23 @@ const App = () => {
 
   useEffect(() => {
     firebaseService.setListener('onMessage', (event) => {
-      console.log('[fect] firebaseService receive message: ', event);
+      console.log({
+        message: '[fect] firebaseService receive message: ',
+        event,
+      });
+      let user;
+      if (!!event.payload?.uid) {
+        user = {
+          uid: event.payload.uid,
+          displayName: event.payload.displayName,
+        };
+      }
+
+      setAuthState({
+        loading: false,
+        isUserAuthicated: !!user?.uid,
+        user,
+      });
     });
   }, []);
   return (
