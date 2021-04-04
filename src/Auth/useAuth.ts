@@ -1,14 +1,15 @@
 import { createContext, useContext } from 'react';
+import { AppUser } from '../types/User';
 
 type FullState = {
   isUserAuthicated: boolean;
-  user?: { uid: string; displayName: string | null };
+  user: AppUser | null;
   loading: boolean;
 } & { logout: () => void };
 
 export const authContext = createContext<FullState>({
   isUserAuthicated: false,
-  user: undefined,
+  user: null,
   loading: true,
   logout: () => {},
 });

@@ -1,43 +1,24 @@
-/* eslint-disable */
-import React, { createContext, useContext, useEffect, useState } from 'react';
-
+/* eslint-disable @typescript-eslint/indent */
+import React, { useEffect, useState } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
 
-import AppLoader from '../AppLoader';
-// import PersonsMap from '../PersonsMap';
-import theme from '../Theme';
-
-import './App.css';
-import useAppLoading from './useAppLoading';
-import LoginScreen from '../Screens/LoginScreen/LoginScreen';
-import firebaseService, { User } from '../../services/FirebaseService';
-import { useAuth, authContext } from '../../Auth/useAuth';
-import HomeScreen from '../Screens/HomeScreen';
+import { AuthState } from '../../types/Auth';
+import firebaseService from '../../services/FirebaseService';
+import { authContext } from '../../Auth/useAuth';
 import { PersonService, personService } from '../../Persons';
 import DebugContext from '../../contexts/DebugContext';
 
-type AuthState = {
-  isUserAuthicated: boolean;
-  user: User;
-};
+import AppLoader from '../AppLoader';
+import theme from '../Theme';
+import Routes from '../Routes/Routes';
+
+import './App.css';
 
 const App = () => {
-  // const auth = useAppLoading();
-  // console.log({ 'auth.loading': auth.loading });
-  const [authState, setAuthState] = useState<{
-    isUserAuthicated: boolean;
-    user?: { uid: string; displayName: string | null };
-    loading: boolean;
-  }>({
+  const [authState, setAuthState] = useState<AuthState>({
     isUserAuthicated: false,
-    user: undefined,
+    user: null,
     loading: true,
   });
   const auth = {
@@ -49,17 +30,18 @@ const App = () => {
 
   useEffect(() => {
     firebaseService.setListener('onMessage', (event) => {
+      // eslint-disable-next-line
       console.log({
         message: '[fect] firebaseService receive message: ',
         event,
       });
-      let user;
-      if (!!event.payload?.uid) {
-        user = {
-          uid: event.payload.uid,
-          displayName: event.payload.displayName,
-        };
-      }
+      const user = event.payload?.uid
+        ? {
+            uid: event.payload.uid,
+            displayName: event.payload.displayName,
+            photoURL: event.payload.photoURL,
+          }
+        : null;
 
       setAuthState({
         loading: false,
@@ -73,38 +55,14 @@ const App = () => {
       <PersonService.Provider value={personService}>
         <DebugContext.Provider value={{ debug: false }}>
           {/* <ThemeContext.Provider value={themeService}> */}
-          <Router>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
 
-              {auth.loading && <AppLoader />}
-              {!auth.loading && (
-                <Switch>
-                  <Route path="/about">About</Route>
-                  <Route path="/users">Users</Route>
-                  <Route path="/login">
-                    <LoginScreen />
-                  </Route>
-                  <Route
-                    path="/"
-                    render={({ location }) => {
-                      console.log({ message: 'a-la private route', auth });
-                      return auth.isUserAuthicated ? (
-                        <HomeScreen />
-                      ) : (
-                        <Redirect
-                          to={{
-                            pathname: '/login',
-                            state: { from: location },
-                          }}
-                        />
-                      );
-                    }}
-                  />
-                </Switch>
-              )}
-            </ThemeProvider>
-          </Router>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+
+            {auth.loading && <AppLoader />}
+            {!auth.loading && <Routes />}
+          </ThemeProvider>
+
           {/* </ThemeContext.Provider> */}
         </DebugContext.Provider>
       </PersonService.Provider>
