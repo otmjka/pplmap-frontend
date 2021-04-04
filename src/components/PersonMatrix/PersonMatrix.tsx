@@ -12,7 +12,7 @@ const MatrixContainer = styled(Box)({
   width: 200,
   height: 200,
   backgroundColor: 'blueviolet',
-  border: '1px #eee solid',
+  border: 'none',
 });
 
 const RowContainer = styled(Box)({ width: '100%' });
@@ -28,9 +28,9 @@ export const PersonMatrix = (props: { birthday: string }) => {
         return (
           // eslint-disable-next-line react/no-array-index-key
           <RowContainer key={j}>
-            {row.map((key) => {
+            {row.map((key, rowItemIndex) => {
               return (
-                <NumberBox key={key}>
+                <NumberBox key={key} odd={((j + rowItemIndex) % 2) as 0 | 1}>
                   {squareNumbers[key] ? fill(key, squareNumbers[key]) : '-'}
                 </NumberBox>
               );

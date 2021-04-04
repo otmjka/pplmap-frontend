@@ -8,17 +8,6 @@ import H2 from '../H2';
 import { AddPersonFormData } from '../../types/Person';
 import FormInput from '../FormInput';
 
-const formValidate = (values: {
-  name: string;
-  birthday: string;
-}): { name?: string; birthday?: string } => {
-  const errors: { name?: string; birthday?: string } = {};
-  if (!values.name) {
-    errors.name = 'Required';
-  }
-  return errors;
-};
-
 const AddPersonForm = ({
   onClose,
   onSubmit,

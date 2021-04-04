@@ -11,7 +11,7 @@ const ContainerNumberBox = styled(Box)({
   display: 'block',
   position: 'relative',
   width: '100%',
-  border: '1px #eee solid',
+  border: 'none',
 });
 
 const ContentNumberBox = styled(Box)({
@@ -21,19 +21,26 @@ const ContentNumberBox = styled(Box)({
   transform: 'translateX(-50%) translateY(-50%)',
 });
 
-const AfterNumberBox = styled(Box)({
+const AfterNumberBox = styled(({ odd, ...other }) => <Box {...other} />)({
   display: 'block',
   paddingBottom: '100%',
   backgroundColor: '#fff',
+  background: (props: { odd: 0 | 1 }) => ['red', 'orange'][props.odd],
 });
 
-const NumberBox = ({ children }: { children: React.ReactNode }) => {
+const NumberBox = ({
+  odd,
+  children,
+}: {
+  odd: 1 | 0;
+  children: React.ReactNode;
+}) => {
   return (
     <ContainerNumberBox>
       <ContentNumberBox>
         <Typography>{children}</Typography>
       </ContentNumberBox>
-      <AfterNumberBox />
+      <AfterNumberBox odd={odd} />
     </ContainerNumberBox>
   );
 };

@@ -1,9 +1,7 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
 
-interface AppLoaderProps {}
-
-const AppLoader = ({}: AppLoaderProps) => {
+const AppLoader = () => {
   return <Box>Loading...</Box>;
 };
 

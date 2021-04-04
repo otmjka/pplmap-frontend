@@ -12,7 +12,7 @@ export default {
 
 const Template = () => (
   <div style={{ position: 'absolute', top: '0', left: '0', width: '300px' }}>
-    <NumberBox>111</NumberBox>
+    {/* <NumberBox odd={1}>111</NumberBox> */}
   </div>
 );
 

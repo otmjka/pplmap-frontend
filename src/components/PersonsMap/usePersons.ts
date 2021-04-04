@@ -1,17 +1,10 @@
 import { useEffect, useState } from 'react';
-import axios, { AxiosResponse } from 'axios';
-import { format, parse } from 'date-fns';
+import { format } from 'date-fns';
 
 import firebaseService from '../../services/FirebaseService';
 
-import {
-  AddPersonFormData,
-  PersonData,
-  PersonUIData,
-} from '../../types/Person';
-import config from '../../config';
+import { PersonUIData } from '../../types/Person';
 import { useAuth } from '../../Auth/useAuth';
-import addPerson from '../../Persons/addPerson';
 
 const PERSONS_COLLECTION = 'persons';
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 import { PersonMatrix } from '../PersonMatrix';
@@ -8,11 +7,10 @@ import { PersonUIData } from '../../types/Person';
 
 interface MapPersonProps {
   person: PersonUIData;
-  onPersonSelect: (person: PersonUIData) => void;
 }
-const MapPerson = ({ person, onPersonSelect }: MapPersonProps) => {
+const MapPerson = ({ person }: MapPersonProps) => {
   return (
-    <Paper square onClick={() => onPersonSelect(person)}>
+    <div>
       <Box display="flex" p={1}>
         <Box mr={1}>
           <Typography>{person.person_name}</Typography>
@@ -22,7 +20,7 @@ const MapPerson = ({ person, onPersonSelect }: MapPersonProps) => {
         </Box>
       </Box>
       <PersonMatrix birthday={person.birthday} />
-    </Paper>
+    </div>
   );
 };
 

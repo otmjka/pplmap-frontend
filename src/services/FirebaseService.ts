@@ -53,6 +53,7 @@ class FirebaseService {
   userProfile: UserProfile | null = null;
 
   constructor({}: FirebaseServiceInitType) {
+    // eslint-disable-next-line no-console
     console.log('init Firebase Service', config.firebase);
 
     this.onMessageTarget = new EventTarget();
@@ -64,6 +65,7 @@ class FirebaseService {
 
   init() {
     firebase.auth().onAuthStateChanged(async (userData) => {
+      // eslint-disable-next-line no-console
       console.log({ userData });
       this.isAppLoading = false;
       this.currentUser = userData;
@@ -110,7 +112,6 @@ class FirebaseService {
         throw new Error(`no channel: ${channelName}`);
       const localCallBack = (event: Event) => {
         // eslint-disable-next-line
-        debugger;
         callback({
           type: 'log',
           message: 'to_do',
@@ -135,6 +136,7 @@ class FirebaseService {
     const authicatedStatus = !this.currentUser
       ? false
       : !this.currentUser.isAnonymous;
+    // eslint-disable-next-line no-console
     console.log('isAuthicated', authicatedStatus);
     return authicatedStatus;
   }

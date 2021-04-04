@@ -1,5 +1,4 @@
 import { createContext, useContext } from 'react';
-import { UseAppLoadingState } from '../components/App/useAppLoading';
 
 type FullState = {
   isUserAuthicated: boolean;

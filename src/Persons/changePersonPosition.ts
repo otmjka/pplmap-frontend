@@ -1,11 +1,12 @@
 import firebaseService from '../services/FirebaseService';
+import { CoordsXY } from '../types/Coords';
 
 const changePersonPosition = async ({
   personId,
   offset,
 }: {
   personId: string;
-  offset: { x: number; y: number };
+  offset: CoordsXY;
 }) => {
   const db = firebaseService.firebaseApp.firestore();
   const uid = firebaseService.userProfile?.uid;
